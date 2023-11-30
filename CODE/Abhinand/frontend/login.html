@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Login</title>
+    <link rel="stylesheet" type="text/css" href="login.css">
+</head>
+<body>
+    <div class="login-container">
+        <h2>Create Account</h2>
+        <form action="index.html" method="post" onsubmit="return redirectToIndex()">
+            <input type="text" id="username" name="username" placeholder="Username" required>
+            <input type="text" id="department" name="department" placeholder="Department" required>
+            <button type="submit">Create</button>
+        </form>
+    </div>
+    <script>
+        function redirectToIndex() {
+            // Add any additional logic here if needed
+            // For now, just redirect to the index.html page
+            window.location.href = "index.html";
+            return false; // Prevent form submission
+        }
+    </script>
+</body>
+</html>
