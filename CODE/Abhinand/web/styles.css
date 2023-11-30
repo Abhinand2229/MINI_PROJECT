@@ -1,0 +1,60 @@
+/* styles.css */
+#one {
+    height: 10vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    /* background: url('path/to/your/image.jpg') center center/cover no-repeat;  */
+    background-color:aliceblue;
+}
+
+#two {
+    text-align: center;
+    margin-top: 20px;
+    font-family: Arial, sans-serif;
+    background-color:azure;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+h1 {
+    color: #e58e1a;
+}
+
+form {
+    display: inline-block;
+}
+
+label {
+    font-size: 18px;
+    margin-right: 10px;
+}
+
+select {
+    padding: 5px;
+    font-size: 16px;
+}
+
+button {
+    padding: 8px 16px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+}
