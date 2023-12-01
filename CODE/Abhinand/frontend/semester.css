@@ -1,0 +1,40 @@
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+}
+
+#head1 {
+    text-align: center;
+    color: #333333;
+}
+
+#one {
+    text-align: center;
+    font-size: larger;
+    margin-top: 50px;
+}
+
+#subjectList {
+    text-align: center;
+    font-size: larger;
+    margin-top: 30px;
+}
+
+
+
+
+
+
+
+/* #subjectList {
+    text-align: center;
+    margin-top: 20px;
+}
+
+#subjectSelect {
+    padding: 8px;
+    font-size: 16px;
+} */

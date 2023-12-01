@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semester and Subject Selection</title>
+    <link rel="stylesheet" type="text/css" href="semester.css">
+</head>
+<body>
+
+    <div id="head1">
+    <h1>Semester and Subject Selection</h1>
+    </div>
+
+    <div id="one">
+    <form id="semesterForm">
+        <label for="semesterSelect">Select a Semester:</label>
+        <select name="semester" id="semesterSelect" onchange="updateSubjects()">
+            <option value="">Select a Semester</option>
+            <option value="semester1">Semester 1</option>
+            <option value="semester2">Semester 2</option>
+            <option value="semester3">Semester 3</option>
+            <option value="semester4">Semester 4</option>
+        </select>
+    </form>
+    </div>
+
+
+    <div id="subjectList" style="display: none;">
+        <label for="subjectSelect">Select a Subject:</label>
+        <select name="subject" id="subjectSelect"></select>
+    </div>
+
+    <script>
+        // Define subjects for each semester
+        var subjectsBySemester = {
+            semester1: ["Subject 1", "Subject 2", "Subject 3"],
+            semester2: ["Subject 4", "Subject 5", "Subject 6"],
+            semester3: ["Subject 7", "Subject 8", "Subject 9"],
+            semester4: ["Subject 10", "Subject 11", "Subject 12"]
+        };
+
+        function updateSubjects() {
+            var semesterSelect = document.getElementById('semesterSelect');
+            var subjectList = document.getElementById('subjectList');
+            var subjectSelect = document.getElementById('subjectSelect');
+
+            // Clear previous subjects
+            subjectSelect.innerHTML = '';
+
+            // Display subject list only if a semester is selected
+            if (semesterSelect.value !== '') {
+                var selectedSubjects = subjectsBySemester[semesterSelect.value];
+
+                // Populate subjects for the selected semester
+                selectedSubjects.forEach(function(subject) {
+                    var option = document.createElement('option');
+                    option.value = subject;
+                    option.textContent = subject;
+                    subjectSelect.appendChild(option);
+                });
+
+                // Show the subject list
+                subjectList.style.display = 'block';
+            } else {
+                // Hide the subject list if no semester is selected
+                subjectList.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
