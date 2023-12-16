@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        select,
+        input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"] {
+            background-color: #4caf50;
+            color: #fff;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    </style>
+    <script>
+        function validateForm() {
+            // JavaScript validation for Batch dropdown
+            var batch = document.getElementById("batch").value;
+            if (batch === "") {
+                alert("Please select a Batch");
+                return false;
+            }
+
+            // JavaScript validation for Semester dropdown
+            var semester = document.getElementById("semester").value;
+            if (semester === "") {
+                alert("Please select a Semester");
+                return false;
+            }
+
+            // JavaScript validation for Subject dropdown
+            var subject = document.getElementById("subject").value;
+            if (semester !== "4" && subject === "") {
+                alert("Please select a Subject");
+                return false;
+            }
+
+            // JavaScript validation for Choose option dropdown
+            var chooseOption = document.getElementById("chooseOption").value;
+            if (chooseOption === "") {
+                alert("Please select an option in Choose option");
+                return false;
+            }
+
+            // Update the form action based on the selected option
+
+            if (chooseOption === "Import") {
+                document.getElementById("analysisForm").action = "{{ url_for('direct') }}";
+            } else if (chooseOption === "UseMatrix") {
+                document.getElementById("analysisForm").action = "{{ url_for('direct2') }}";
+            }
+
+
+            return true;
+        }
+
+        function updateSubjects() {
+            var semester = document.getElementById("semester").value;
+            var subjectDropdown = document.getElementById("subject");
+
+            // Clear previous options
+            subjectDropdown.innerHTML = "";
+
+            // Add subjects based on selected Semester
+            if (semester === "1") {
+                addOption(subjectDropdown, "Advanced Data Structure");
+                addOption(subjectDropdown, "Advanced Software Engineering");
+                addOption(subjectDropdown, "Mathematical Foundations for Computing");
+                addOption(subjectDropdown, "Digital Fundamentals & Computer Architecture");
+                addOption(subjectDropdown, "Programming Lab");
+                addOption(subjectDropdown, "Data Structure Lab");
+                addOption(subjectDropdown, "Web Programming Lab");
+            } else if (semester === "2") {
+                addOption(subjectDropdown, "Advanced Computer Networks");
+                addOption(subjectDropdown, "Advanced Database Management System");
+                addOption(subjectDropdown, "Virtualisation and Containers");
+                addOption(subjectDropdown, "Artificial Intelligence");
+                addOption(subjectDropdown, "Networking and System Administration Lab");
+                addOption(subjectDropdown, "Advanced DBMS Lab");
+                addOption(subjectDropdown, "Object Oriented Programming Lab");
+                addOption(subjectDropdown, "Applied Statistics");
+                addOption(subjectDropdown, "IPR and Cyber Laws");
+            } else if (semester === "3") {
+                addOption(subjectDropdown, "Data Science & Machine Learning");
+                addOption(subjectDropdown, "Design & and Analysis of Algorithms");
+                addOption(subjectDropdown, "Operations and Research");
+                addOption(subjectDropdown, "Deep Learning");
+                addOption(subjectDropdown, "Data Science Lab");
+                addOption(subjectDropdown, "Mini Project");
+                addOption(subjectDropdown, "Mobile Application Development Lab");
+            } else if (semester === "4") {
+                addOption(subjectDropdown, "Main Project");
+            }
+        }
+
+        function addOption(selectElement, optionText) {
+            var option = document.createElement("option");
+            option.text = optionText;
+            selectElement.add(option);
+        }
+    </script>
+</head>
+<body>
+    
+    <form id="analysisForm" onsubmit="return validateForm()" method="post" > 
+        <h2>CO-PO Direct Assessment</h2>
+
+        <label for="batch">Select the Batch:</label>
+        <select id="batch" name="batch">
+            <option value="">Select Batch</option>
+            <!-- Extend batch range up to 2048-50 -->
+            <script>
+                for (var i = 2022; i <= 2048; i++) {
+                    document.write("<option value='" + i + "-" + (i + 2) + "'>" + i + "-" + (i + 2) + "</option>");
+                }
+            </script>
+        </select>
+
+        <label for="semester">Select the Semester:</label>
+        <select id="semester" name="semester" onchange="updateSubjects()">
+            <option value="">Select Semester</option>
+            <option value="1">Semester 1</option>
+            <option value="2">Semester 2</option>
+            <option value="3">Semester 3</option>
+            <option value="4">Semester 4</option>
+        </select>
+
+        <label for="subject">Select the Subject:</label>
+        <select id="subject" name="subject">
+            <option value="">Select Subject</option>
+            <!-- Subjects will be dynamically added based on the selected semester using JavaScript -->
+        </select>
+
+        <label for="chooseOption">Choose option:</label>
+        <select id="chooseOption" name="chooseOption">
+            <option value="">Choose Option</option>
+            <option value="Import">Import previous module for analysis</option>
+            <option value="UseMatrix">Use updated CO-PO matrix for analysis</option>
+        </select>
+
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>
