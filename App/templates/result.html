@@ -1,0 +1,91 @@
+<!-- templates/result.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Result</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #4caf50;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+    </style>
+
+</head>
+<body>
+    <h1>PO Attainment Result</h1>
+
+    <p>Batch: {{ selected_batch }}</p>
+    <p>Semester: {{ selected_semester }}</p>
+    <p>Subject: {{ selected_batch }}</p>
+
+    <table border="1">
+        <tr>
+            <!-- <th>Heading</th> -->
+            <th>PO1</th>
+            <th>PO2</th>
+            <th>PO3</th>
+            <th>PO4</th>
+            <th>PO5</th>
+            <th>PO6</th>
+            <th>PO7</th>
+            <th>PO8</th>
+            <th>PO9</th>
+            <th>PO10</th>
+            <th>PO11</th>
+            <th>PO12</th>
+        </tr>
+        {% for matrix_item in matrix_items %}
+            <tr>
+                <!-- <td>{{ matrix_item.heading }}</td> -->
+                <td>{{ matrix_item.item1 }}</td>
+                <td>{{ matrix_item.item2 }}</td>
+                <td>{{ matrix_item.item3 }}</td>
+                <td>{{ matrix_item.item4 }}</td>
+                <td>{{ matrix_item.item5 }}</td>
+                <td>{{ matrix_item.item6 }}</td>
+                <td>{{ matrix_item.item7 }}</td>
+                <td>{{ matrix_item.item8 }}</td>
+                <td>{{ matrix_item.item9 }}</td>
+                <td>{{ matrix_item.item10 }}</td>
+                <td>{{ matrix_item.item11 }}</td>
+                <td>{{ matrix_item.item12 }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
