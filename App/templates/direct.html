@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Internal Assessment Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0;
+        }
+
+        label.required::before {
+            content: '* ';
+            color: red;
+        }
+
+        input, select {
+            padding: 8px;
+            margin-bottom: 10px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>CO-PO Direct Assessment</h2>
+        <form id="assessmentForm" method="POST" onsubmit="return validateForm()" action="{{ url_for('calculate') }}" enctype="multipart/form-data">
+            
+            <label for="batch" class="required">Batch:</label>
+            <input type="text" id="batch" name="batch" placeholder="Selected batch" readonly required>
+
+            <label for="numStudents" class="required">Number of Students:</label>
+            <input type="number" id="numStudents" name="numStudents" placeholder="Enter the number of students (e.g., 60)" required>
+
+            <label for="numColumns" class="required">Number of Course Outcomes:</label>
+            <input type="number" id="numColumns" name="numColumns" placeholder="Enter the number of COs (e.g., 5)" required>
+
+            <!-- Updated the input field to display the selected semester -->
+            <label for="semester" class="required">Semester:</label>
+            <input type="text" id="semester" name="semester" placeholder="Selected Semester" readonly required>
+
+            <!-- Updated the select element to display subjects dynamically -->
+            <label for="subject" class="required">Select the Subject:</label>
+            <select id="subject" name="subject" required>
+                <option value="">Select Subject</option>
+                <!-- Subjects will be dynamically added based on the selected semester using JavaScript -->
+            </select>
+
+            <label for="InternalMarks" class="required">Enter Internal Marks:</label>
+            <button type="button" onclick="generateInternalMarksExcel()">Generate Internal Marks CSV file</button>
+
+            <label for="internalScoresFile" class="required">Internal Assessment Score (Upload the CSV file):</label>
+            <input type="file" id="internalScoresFile" name="internalScoresFile" accept=".csv" required>
+
+            <label for="ExternalMarks" class="required">Enter External Marks:</label>
+            <button type="button" onclick="generateExternalMarksExcel()">Generate External Marks CSV</button>
+
+            <label for="externalScores" class="required">External Assessment Score (Upload the CSV file):</label>
+            <input type="file" id="externalScores" name="externalScores" accept=".csv" required>
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        function validateForm() {
+            // Validate number of students
+            var numStudents = document.getElementById('numStudents').value;
+            if (numStudents === '' || isNaN(numStudents) || parseInt(numStudents) <= 0) {
+                alert('Please enter a valid number of students.');
+                return false;
+            }
+
+            // Validate maximum internal marks
+            var maxInternalMarks = document.getElementById('maxInternalMarks').value;
+            if (maxInternalMarks === '' || isNaN(maxInternalMarks) || parseInt(maxInternalMarks) <= 0) {
+                alert('Please enter a valid maximum internal marks.');
+                return false;
+            }
+
+            // Validate internal assessment scores CSV file
+            var internalScoresFile = document.getElementById('internalScoresFile').files[0];
+            if (!internalScoresFile) {
+                alert('Please upload the Internal Assessment Scores CSV file.');
+                return false;
+            }
+
+            return true;
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            // Retrieve semester from the URL query parameters
+            var urlParams = new URLSearchParams(window.location.search);
+            var semesterFromURL = urlParams.get('semester');
+
+            // Set the semester in the input field
+            document.getElementById("semester").value = semesterFromURL || "";
+
+            // Update subjects based on the selected semester
+            updateSubjects(semesterFromURL);
+
+            var urlParams = new URLSearchParams(window.location.search);
+            var batchFromURL = urlParams.get('batch');
+
+            // Set the batch in the input field
+            document.getElementById("batch").value = batchFromURL || "";
+        });
+
+        function updateSubjects(selectedSemester) {
+            var subjectDropdown = document.getElementById("subject");
+
+            // Clear previous options
+            subjectDropdown.innerHTML = "";
+
+            // Add subjects based on selected Semester
+            if (selectedSemester === "1") {
+                addOption(subjectDropdown, "Advanced Data Structure");
+                addOption(subjectDropdown, "Advanced Software Engineering");
+                addOption(subjectDropdown, "Mathematical Foundations for Computing");
+                addOption(subjectDropdown, "Digital Fundamentals & Computer Architecture");
+                addOption(subjectDropdown, "Programming Lab");
+                addOption(subjectDropdown, "Data Structure Lab");
+                addOption(subjectDropdown, "Web Programming Lab");
+            } else if (selectedSemester === "2") {
+                addOption(subjectDropdown, "Advanced Computer Networks");
+                addOption(subjectDropdown, "Advanced Database Management System");
+                addOption(subjectDropdown, "Virtualisation and Containers");
+                addOption(subjectDropdown, "Artificial Intelligence");
+                addOption(subjectDropdown, "Networking and System Administration Lab");
+                addOption(subjectDropdown, "Advanced DBMS Lab");
+                addOption(subjectDropdown, "Object Oriented Programming Lab");
+                addOption(subjectDropdown, "Applied Statistics");
+                addOption(subjectDropdown, "IPR and Cyber Laws");
+            }
+            else if (selectedSemester === "3") {
+                addOption(subjectDropdown, "Data Science & Machine Learning");
+                addOption(subjectDropdown, "Design & and Analysis of Algorithms");
+                addOption(subjectDropdown, "Operations and Research");
+                addOption(subjectDropdown, "Deep Learning");
+                addOption(subjectDropdown, "Data Science Lab");
+                addOption(subjectDropdown, "Mini Project");
+                addOption(subjectDropdown, "Mobile Application Development Lab");
+            }
+            else if (selectedSemester === "4") {
+                addOption(subjectDropdown, "Main Project");
+            }
+            
+        }
+
+        function addOption(selectElement, optionText) {
+            var option = document.createElement("option");
+            option.text = optionText;
+            selectElement.add(option);
+        }
+
+
+
+
+        // 
+        
+        function generateInternalMarksExcel() {
+            var numStudents = document.getElementById("numStudents").value;
+            var numColumns = document.getElementById("numColumns").value;
+            var selectedSubject = document.getElementById("subject").value || "Subject Name";
+
+
+            if (
+                numStudents === "" ||
+                isNaN(numStudents) ||
+                numStudents <= 0 ||
+                numStudents % 1 !== 0 ||
+                numColumns === "" ||
+                isNaN(numColumns) ||
+                numColumns <= 0 ||
+                numColumns % 1 !== 0
+            ) {
+                alert("Please enter valid positive integers for the Number of Students and Number of Columns.");
+                return;
+            }
+
+            // Generate Excel sheet data for internal marks
+            var excelContent = selectedSubject + ",";
+
+            // Generate CO headers
+            for (var i = 1; i <= numColumns; i++) {
+                excelContent += "CO" + i + ",";
+            }
+            excelContent += "\n";
+
+            // Add Roll No / Max. Marks header
+            excelContent += "Roll No / Max. Marks,";
+            for (var i = 1; i <= numColumns; i++) {
+                excelContent += ",";
+            }
+            excelContent += "\n";
+
+            // Generate data rows
+            for (var i = 1; i <= numStudents; i++) {
+                excelContent += i + ",";
+                // Fill in empty values for each CO
+                for (var j = 1; j <= numColumns; j++) {
+                    excelContent += ",";
+                }
+                excelContent += "\n";
+            }
+
+            // Create Blob and trigger download
+            var blob = new Blob([excelContent], { type: "text/csv" });
+            var link = document.createElement("a");
+
+            if (link.download !== undefined) {
+                var url = URL.createObjectURL(blob);
+                link.setAttribute("href", url);
+                link.setAttribute("download", "InternalMarks.csv");
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            } else {
+                alert("Your browser does not support the download feature. Please try a different browser.");
+            }
+        }
+
+
+
+        function generateExternalMarksExcel() {
+            var numStudents = document.getElementById("numStudents").value;
+
+            if (numStudents === "" || isNaN(numStudents) || numStudents <= 0 || numStudents % 1 !== 0) {
+                alert("Please enter a valid positive integer for the Number of Students.");
+                return;
+            }
+
+            // Generate Excel sheet data for external marks
+            var excelContent = "Rollno,Marks\n";
+
+            // Generate data rows
+            for (var i = 1; i <= numStudents; i++) {
+                excelContent += i + ",\n";
+            }
+
+            // Create Blob and trigger download
+            var blob = new Blob([excelContent], { type: "text/csv" });
+            var link = document.createElement("a");
+
+            if (link.download !== undefined) {
+                var url = URL.createObjectURL(blob);
+                link.setAttribute("href", url);
+                link.setAttribute("download", "ExternalMarks.csv");
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            } else {
+                alert("Your browser does not support the download feature. Please try a different browser.");
+            }
+        }
+
+
+    </script>
+</body>
+</html>
+
