@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCA CO-PO Analysis</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        #header-frame {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: url('your-background-image.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #1c0606; /* text color */
+        }
+
+        #button-frame {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f0f0; /* button frame background color */
+        }
+
+        .button {
+            margin: 10px;
+            padding: 15px 30px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            background-color: #4CAF50; /* button color */
+            color: white; /* text color */
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            border-radius: 5px;
+        }
+
+        .button:hover {
+            background-color: #45a049; /* button color on hover */
+        }
+    </style>
+</head>
+<body>
+    <div id="header-frame">
+        <h1>MCA CO-PO Analysis</h1>
+    </div>
+
+    <div id="button-frame">
+        <button class="button" onclick="window.location.href='/result'">View CO-PO Direct Analysis</button>
+        <button class="button" onclick="window.location.href='/result1'">View CO-PO Indirect Analysis</button>
+        <button class="button" onclick="window.location.href='/index'">CO-PO Direct</button>
+        <button class="button" onclick="window.location.href='/indirect'">CO-PO Indirect</button>        
+    </div>
+</body>
+</html>
