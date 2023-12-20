@@ -77,26 +77,24 @@
             <label for="uploadInput" class="required">Updated CO-PO matrix (Upload the CSV file):</label>
             <input type="file" id="uploadInput" name="uploadInput" accept=".csv" required>
 
-            <!-- CO Outcome Dropdown -->
-            <label for="courseOutcome" class="required">Select the Course Outcome:</label>
-            <select id="courseOutcome" name="courseOutcome" required>
-                <option value="">Select</option>
-                <!-- Options will be dynamically added based on user input -->
-            </select>
+            <label for="subject" class="required">Enter Subject Name:</label>
+            <input type="text" id="subject" name="subject" placeholder="Selected subject"  required>
 
-            <!-- CO Outcome Dropdown -->
 
             <label for="numStudents" class="required">Number of Students:</label>
             <input type="number" id="numStudents" name="numStudents" placeholder="Enter the number of students (e.g., 100)" required>
 
             <!-- CSV file for internal marks -->
-            <label for="excelSheet" class="required">Enter Internal marks:</label>
-            <button type="button" onclick="generateExcelSheet()">Generate CSV</button>
+            <label for="excelSheet" class="required">Generate Internal marks csv:</label>
+            <button type="button" onclick="generateInternalMarksExcel()">Generate CSV</button>
 
 
             <!-- Internal Assessment Score -->
             <label for="internalScoresFile" class="required">Internal Assessment Score (Upload the CSV file):</label>
             <input type="file" id="internalScoresFile" name="internalScoresFile" accept=".csv" required>
+
+            <label for="excelSheet1" class="required">Generate Internal marks csv:</label>
+            <button type="button" onclick="generateExcelSheet()">Generate CSV</button>
 
             <!-- External Assessment Score -->
             <label for="externalScores" class="required">External Assessment Score (Upload the CSV file):</label>
@@ -144,9 +142,23 @@
             }
 
             // Generate CSV data
-            var csvContent = "Index,Correlation\n";
-            for (var i = 1; i <= numberOfCOs * 12; i++) {
-                csvContent += i + ",\n";
+            var csvContent = "Index,";
+
+            // Add PO labels to the first row
+            for (var poIndex = 1; poIndex <= 12; poIndex++) {
+                csvContent += "po" + poIndex + ",";
+            }
+            csvContent = csvContent.slice(0, -1); // Remove the trailing comma
+            csvContent += "\n";
+
+            // Add CO labels without correlation data
+            for (var coIndex = 1; coIndex <= numberOfCOs; coIndex++) {
+                csvContent += "co" + coIndex + ",";
+                for (var poIndex = 1; poIndex <= 12; poIndex++) {
+                    csvContent += ",";
+                }
+                csvContent = csvContent.slice(0, -1); // Remove the trailing comma
+                csvContent += "\n";
             }
 
             // Create Blob and trigger download
@@ -163,14 +175,71 @@
             } else {
                 alert("Your browser does not support the download feature. Please try a different browser.");
             }
+        }
 
-            // Dynamically populate the Course Outcome dropdown
-            var courseOutcomeDropdown = document.getElementById("courseOutcome");
-            courseOutcomeDropdown.innerHTML = '<option value="">Select</option>';
-            for (var j = 1; j <= numberOfCOs; j++) {
-                courseOutcomeDropdown.innerHTML += '<option value="CO-' + j + '">CO-' + j + '</option>';
+        function generateInternalMarksExcel() {
+            var numStudents = document.getElementById("numStudents").value;
+            var numColumns = document.getElementById("numberOfCOs").value;
+            var selectedSubject = document.getElementById("subject").value;
+
+
+            if (
+                numStudents === "" ||
+                isNaN(numStudents) ||
+                numStudents <= 0 ||
+                numStudents % 1 !== 0 ||
+                numColumns === "" ||
+                isNaN(numColumns) ||
+                numColumns <= 0 ||
+                numColumns % 1 !== 0
+            ) {
+                alert("Please enter valid positive integers for the Number of Students and Number of Columns.");
+                return;
+            }
+
+            // Generate Excel sheet data for internal marks
+            var excelContent = selectedSubject + ",";
+
+            // Generate CO headers
+            for (var i = 1; i <= numColumns; i++) {
+                excelContent += "CO" + i + ",";
+            }
+            excelContent += "\n";
+
+            // Add Roll No / Max. Marks header
+            excelContent += "Roll No / Max. Marks,";
+            for (var i = 1; i <= numColumns; i++) {
+                excelContent += ",";
+            }
+            excelContent += "\n";
+
+            // Generate data rows
+            for (var i = 1; i <= numStudents; i++) {
+                excelContent += i + ",";
+                // Fill in empty values for each CO
+                for (var j = 1; j <= numColumns; j++) {
+                    excelContent += ",";
+                }
+                excelContent += "\n";
+            }
+
+            // Create Blob and trigger download
+            var blob = new Blob([excelContent], { type: "text/csv" });
+            var link = document.createElement("a");
+
+            if (link.download !== undefined) {
+                var url = URL.createObjectURL(blob);
+                link.setAttribute("href", url);
+                link.setAttribute("download", "InternalMarks_new_subject.csv");
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            } else {
+                alert("Your browser does not support the download feature. Please try a different browser.");
             }
         }
+
+
 
         function generateExcelSheet() {
             var numStudents = document.getElementById("numStudents").value;
@@ -193,7 +262,7 @@
             if (link.download !== undefined) {
                 var url = URL.createObjectURL(blob);
                 link.setAttribute("href", url);
-                link.setAttribute("download", "StudentMarks.csv");
+                link.setAttribute("download", "ExternalMarks_new_subject.csv");
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
