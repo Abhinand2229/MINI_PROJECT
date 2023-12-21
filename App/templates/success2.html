@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Submission Success</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: white;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #4caf50;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        #button-frame {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: white; /* button frame background color */
+        }
+
+        .button {
+            margin: 10px;
+            padding: 15px 30px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            background-color: #4CAF50; /* button color */
+            color: white; /* text color */
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            border-radius: 20px;
+        }
+
+        .button:hover {
+            background-color: #45a049; /* button color on hover */
+        }
+        .one{
+            margin-top: 50px;
+            background-color: #45a049;
+            color: white;
+            font-size: larger;
+            padding-left: 50px;
+        }
+
+        .two{
+            height: 100px;
+            background-color: #4caf50;
+        }
+
+
+    </style>
+</head>
+<body>
+    <div class="two">
+        <h1>PO Attainment Result</h1>
+    </div>
+    
+    <div class="one">
+    <p>Batch: {{ additional_value1 }}</p>
+    <p>Semester: {{ additional_value2 }}</p>
+    <p>Subject: {{ additional_value3 }}</p>
+    </div>
+
+    <table border="1">
+        <tr>
+            <th>PO1</th>
+            <th>PO2</th>
+            <th>PO3</th>
+            <th>PO4</th>
+            <th>PO5</th>
+            <th>PO6</th>
+            <th>PO7</th>
+            <th>PO8</th>
+            <th>PO9</th>
+            <th>PO10</th>
+            <th>PO11</th>
+            <th>PO12</th>
+        </tr>
+            {% for i in range(12) %}
+                <td>{{ average_column_matrix[0][i] }}</td>
+            {% endfor %}
+    </table>
+    <br>
+    <div id="button-frame">
+    <button class="button" onclick="window.location.href='/result2'">GO to Results Page</button>
+    </div>
+
+</body>
+</html>

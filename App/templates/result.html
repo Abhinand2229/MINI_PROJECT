@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Data</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+        }
+
+        h1 {
+            font-style: oblique;
+            color: #000000;
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #4caf50;
+            color: white;
+        }
+
+        table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table table th, table table td {
+            padding: 8px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .button {
+            margin: 10px;
+            padding: 10px 25px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            background-color: #4CAF50; /* button color */
+            color: white; /* text color */
+            align-items: center;
+            text-decoration: none;
+            display: inline-block;
+            border-radius: 20px;
+        }
+
+        table table th {
+            background-color: #4caf50;
+        }
+    </style>
+
+</head>
+<body>
+    <h1>CO-PO Direct for CO-PO Mapping</h1>
+    <div id="button-frame">
+        <button class="button" onclick="window.location.href='/form2'">GO to Main Page</button>
+    </div>
+    <table border="1">
+        <tr>
+            <th>Batch</th>
+            <th>Semester</th>
+            <th>Subject</th>
+            <th>PO Attainment</th>
+        </tr>
+        {% for submission in submissions %}
+            <tr>
+                <td>{{ submission.batch }}</td>
+                <td>{{ submission.semester }}</td>
+                <td>{{ submission.subject }}</td>
+                <td>
+                    <table border="1">
+                        <tr>
+                            <th>PO1</th>
+                            <th>PO2</th>
+                            <th>PO3</th>
+                            <th>PO4</th>
+                            <th>PO5</th>
+                            <th>PO6</th>
+                            <th>PO7</th>
+                            <th>PO8</th>
+                            <th>PO9</th>
+                            <th>PO10</th>
+                            <th>PO11</th>
+                            <th>PO12</th>
+                        </tr>
+                        <tr>
+                            {% for i in range(12) %}
+                                <td>{{ submission.matrix_data[0][i] }}</td>
+                            {% endfor %}
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
