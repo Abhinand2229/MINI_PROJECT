@@ -59,7 +59,11 @@
             display: inline-block;
             border-radius: 20px;
         }
-
+        .data-set {
+            border: 2px solid #ff0101; /* Border color for each set */
+            border-radius: 10px; /* Optional: Rounded corners */
+            margin-bottom: 20px; /* Space between each set */
+        }
 
         table table th {
             background-color: #4caf50;
@@ -72,43 +76,68 @@
     <div id="button-frame">
         <button class="button" onclick="window.location.href='/form2'">GO to Main Page</button>
     </div>
-    <table border="1">
-        <tr>
-            <th>Batch</th>
-            <th>Semester</th>
-            <th>Subject</th>
-            <th>PO Attainment</th>
-        </tr>
-        {% for submission in submissions %}
-            <tr>
-                <td>{{ submission.batch }}</td>
-                <td>{{ submission.semester }}</td>
-                <td>{{ submission.subject }}</td>
-                <td>
-                    <table border="1">
-                        <tr>
-                            <th>PO1</th>
-                            <th>PO2</th>
-                            <th>PO3</th>
-                            <th>PO4</th>
-                            <th>PO5</th>
-                            <th>PO6</th>
-                            <th>PO7</th>
-                            <th>PO8</th>
-                            <th>PO9</th>
-                            <th>PO10</th>
-                            <th>PO11</th>
-                            <th>PO12</th>
-                        </tr>
-                        <tr>
-                            {% for i in range(12) %}
-                                <td>{{ submission.matrix_data[0][i] }}</td>
+    {% for submission in submissions %}
+        <div class="data-set">
+            <table border="1">
+                <tr>
+                    <th>Batch</th>
+                    <th>Semester</th>
+                    <th>Subject</th>
+                    <th>PO Attainment and New CO-PO Matrix</th>
+                </tr>
+                <tr>
+                    <td>{{ submission.batch }}</td>
+                    <td>{{ submission.semester }}</td>
+                    <td>{{ submission.subject }}</td>
+                    <td>
+                        <table border="1">
+                            <tr>
+                                <th>PO1</th>
+                                <th>PO2</th>
+                                <th>PO3</th>
+                                <th>PO4</th>
+                                <th>PO5</th>
+                                <th>PO6</th>
+                                <th>PO7</th>
+                                <th>PO8</th>
+                                <th>PO9</th>
+                                <th>PO10</th>
+                                <th>PO11</th>
+                                <th>PO12</th>
+                            </tr>
+                            <tr>
+                                {% for i in range(12) %}
+                                    <td>{{ submission.matrix_data[0][i] }}</td>
+                                {% endfor %}
+                            </tr>
+                        </table>
+                        <table border="1">
+                            <tr>
+                                <th>PO1</th>
+                                <th>PO2</th>
+                                <th>PO3</th>
+                                <th>PO4</th>
+                                <th>PO5</th>
+                                <th>PO6</th>
+                                <th>PO7</th>
+                                <th>PO8</th>
+                                <th>PO9</th>
+                                <th>PO10</th>
+                                <th>PO11</th>
+                                <th>PO12</th>
+                            </tr>
+                            {% for i in range(submission.matrix_data1|length) %}
+                                <tr>
+                                    {% for j in range(12) %}
+                                        <td>{{ submission.matrix_data1[i][j] }}</td>
+                                    {% endfor %}
+                                </tr>
                             {% endfor %}
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-        {% endfor %}
-    </table>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    {% endfor %}
 </body>
 </html>

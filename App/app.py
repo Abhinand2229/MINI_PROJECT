@@ -31,6 +31,7 @@ class Submission2(db.Model):
     semester = db.Column(db.String(10))
     subject = db.Column(db.String(50))
     matrix_data = db.Column(db.PickleType())
+    matrix_data1 = db.Column(db.PickleType())
 
 with app.app_context():
     db.create_all()
@@ -435,8 +436,6 @@ def calculate():
 
 @app.route('/submit', methods=['POST'])
 def submit_form():
-    import numpy as np
-    import pandas as pd
     # Retrieve data from the submitted form
     batch2 = request.form.get('batch')
     semester1 = request.form.get('semester')
@@ -533,6 +532,7 @@ def submit_form():
 
 @app.route('/calculate1',  methods=['GET', 'POST'])
 def calculate1():
+    import copy
     file = request.files['input_file']
     batch1 = request.form.get('batch')
     choice = request.form.get('semester')
@@ -545,12 +545,12 @@ def calculate1():
             file.save(file_path)
 
             df = pd.read_csv(file_path, index_col=0, )
-
+    
     co_po_matrix = df.values
-    c_p_matrix = co_po_matrix
+    c_p_matrix = copy.deepcopy(co_po_matrix)
+    
 
-    # Now 'matrix' contains the values from the CSV file excluding the first row and first column
-    print(co_po_matrix)
+    print(c_p_matrix)
 
     co = df.shape[0]
     attainment_levels_internal = []
@@ -559,10 +559,10 @@ def calculate1():
 
     file1 = request.files['internalScoresFile']
     if file1 and allowed_file(file1.filename):
-            # Generate a secure filename and save the file to the UPLOAD_FOLDER
-            filename1 = secure_filename(file1.filename)
-            file_path1 = os.path.join(app.config['UPLOAD_FOLDER'], filename1)
-            file1.save(file_path1)
+        # Generate a secure filename and save the file to the UPLOAD_FOLDER
+        filename1 = secure_filename(file1.filename)
+        file_path1 = os.path.join(app.config['UPLOAD_FOLDER'], filename1)
+        file1.save(file_path1)
 
     internal_data = pd.read_csv(file_path1, skiprows=1, header=None)
     # Extract Roll numbers, CO marks, and maximum marks from the DataFrame
@@ -599,10 +599,10 @@ def calculate1():
     # co_attainment_external
     file2 = request.files['externalScores']
     if file2 and allowed_file(file2.filename):
-            # Generate a secure filename and save the file to the UPLOAD_FOLDER
-            filename2 = secure_filename(file2.filename)
-            file_path2 = os.path.join(app.config['UPLOAD_FOLDER'], filename1)
-            file2.save(file_path2)
+        # Generate a secure filename and save the file to the UPLOAD_FOLDER
+        filename2 = secure_filename(file2.filename)
+        file_path2 = os.path.join(app.config['UPLOAD_FOLDER'], filename2)
+        file2.save(file_path2)
 
     external_data = pd.read_csv(file_path2)       
     # Assume that the first column contains student IDs, and the second contains external marks
@@ -624,21 +624,21 @@ def calculate1():
 
         # Check the conditions and assign the attainment level for external assessment
     if percentage_external >= 50 and percentage_external < 60:
-            attainment_level_external = 1
+        attainment_level_external = 1
     elif percentage_external >= 60 and percentage_external < 70:
-            attainment_level_external = 2
+        attainment_level_external = 2
     elif percentage_external >= 70:
-            attainment_level_external = 3
+        attainment_level_external = 3
     else:
-            attainment_level_external = 0
+        attainment_level_external = 0
 
         #co_attainment_direct
     co_attainment_direct = []  # Initialize an empty list to store CO Attainment (Direct)
 
     for i in range(co):
-            co_attainment = 0.8 * attainment_levels_internal[i] + 0.2 * attainment_level_external  # Calculate CO Attainment
-            co_attainment_rounded = round(co_attainment, 2)  # Round to two decimal places
-            co_attainment_direct.append(co_attainment_rounded)  # Append the rounded CO Attainment to the list
+        co_attainment = 0.8 * attainment_levels_internal[i] + 0.2 * attainment_level_external  # Calculate CO Attainment
+        co_attainment_rounded = round(co_attainment, 2)  # Round to two decimal places
+        co_attainment_direct.append(co_attainment_rounded)  # Append the rounded CO Attainment to the list
 
     for i in range(co_po_matrix.shape[0]):  # Iterate through rows
         for j in range(co_po_matrix.shape[1]):  # Iterate through columns
@@ -668,13 +668,17 @@ def calculate1():
     additional_value2 = choice
     additional_value3 = selected_subject
     rounded_average_column_matrix = [[round(val, 2) for val in average_column_matrix[0]]]
+    # c_p_matrix = c_p_matrix
+
+    print("c_p_matrix:", c_p_matrix)
 
     submission = Submission2(
-            batch=batch,
-            semester=choice,
-            subject=selected_subject,
-            matrix_data=[[round(val, 2) for val in average_column_matrix[0]]]
-        )
+        batch=batch,
+        semester=choice,
+        subject=selected_subject,
+        matrix_data=[[round(val, 2) for val in average_column_matrix[0]]],
+        matrix_data1 = c_p_matrix
+    )
 
     db.session.add(submission)
     db.session.commit()

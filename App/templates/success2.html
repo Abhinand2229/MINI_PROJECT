@@ -85,6 +85,10 @@
         <h1>PO Attainment Result</h1>
     </div>
     
+    <div id="button-frame">
+        <button class="button" onclick="window.location.href='/result2'">GO to Results Page</button>
+    </div>
+    
     <div class="one">
     <p>Batch: {{ additional_value1 }}</p>
     <p>Semester: {{ additional_value2 }}</p>
@@ -110,10 +114,5 @@
                 <td>{{ average_column_matrix[0][i] }}</td>
             {% endfor %}
     </table>
-    <br>
-    <div id="button-frame">
-    <button class="button" onclick="window.location.href='/result2'">GO to Results Page</button>
-    </div>
-
 </body>
 </html>
